@@ -28,7 +28,7 @@ public class UserRepository {
 	
 	public String register (final User user){
 		System.out.println(user.getEmail() + user.getName());
-		final String checkSql = "select * from user where email=?";
+		final String checkSql = "select * from users where email=?";
 		try{
 			User tempUser = jdbcTemplate.queryForObject(checkSql, new Object[]{user.getEmail()}, new UserRowMapper());
 			
@@ -38,7 +38,7 @@ public class UserRepository {
 			
 		
 		
-			final String sql = "insert into user(name,email) values(?,?)";
+			final String sql = "insert into users(name,email) values(?,?)";
 			KeyHolder holder = new GeneratedKeyHolder();
 			jdbcTemplate.update(new PreparedStatementCreator(){
 				@Override
@@ -63,7 +63,7 @@ public class UserRepository {
 	public User getUserTransactions(int userId) {
 		// TODO Auto-generated method stub
 		try{
-			return jdbcTemplate.queryForObject("select * from transaction where user_id=?", new Object[]{userId}, new UserRowMapper());
+			return jdbcTemplate.queryForObject("select * from transaction where u_id=?", new Object[]{userId}, new UserRowMapper());
 		}catch(EmptyResultDataAccessException e){
 			return null;
 		}
@@ -72,7 +72,7 @@ public class UserRepository {
 	public User getUserDetails(int userId) {
 		// TODO Auto-generated method stub
 		
-		return jdbcTemplate.queryForObject("select * from user where id=?", new Object[]{userId}, new UserRowMapper());
+		return jdbcTemplate.queryForObject("select * from users where id=?", new Object[]{userId}, new UserRowMapper());
 
 	}
 
