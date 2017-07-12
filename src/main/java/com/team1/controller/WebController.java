@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.team1.data.Order;
 import com.team1.data.User;
+import com.team1.services.InsertOrderService;
 import com.team1.services.UserRepository;
 
 
@@ -17,6 +19,9 @@ public class WebController {
 
 	@Autowired
 	UserRepository repo;
+	
+	@Autowired
+	InsertOrderService ios;
 	
 	
 	@RequestMapping(value = "/register", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
@@ -44,10 +49,10 @@ public class WebController {
 	}
 	
 	
-	@RequestMapping("/order")
-	public String placeOrder ()
+	@RequestMapping(value = "/order", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public String placeOrder ( @RequestBody Order order)
 	{
-		return "Order placed";
+		return ios.insertOrder(order);
 	}
 	
 	@RequestMapping("/cancelOrder")
