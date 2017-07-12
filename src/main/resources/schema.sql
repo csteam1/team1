@@ -2,7 +2,7 @@ drop table user if exists;
 
 CREATE TABLE user
 (
-	id int(11) NOT NULL,
+	id int(11) NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
 	email varchar(100) NOT NULL,
 	PRIMARY KEY (id)	 

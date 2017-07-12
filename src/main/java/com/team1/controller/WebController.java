@@ -17,7 +17,6 @@ public class WebController {
 
 	@Autowired
 	UserRepository repo;
-	@Autowired
 	
 	
 	@RequestMapping(value = "/register", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
@@ -33,9 +32,9 @@ public class WebController {
 	}
 	
 	@RequestMapping("/user/{userId}")
-	public String detailOfSingleUser(@PathVariable int userId)
+	public User detailOfSingleUser(@PathVariable int userId)
 	{
-		return "User Created userId = " + userId;
+		return repo.getUserDetails(userId);
 	}
 	
 	@RequestMapping("/order")

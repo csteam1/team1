@@ -13,10 +13,13 @@ import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.team1.data.Order;
 import com.team1.data.User;
 
-
+@Repository
 public class UserRepository {
 	
 	@Autowired
@@ -25,9 +28,9 @@ public class UserRepository {
 	
 	public String register (final User user){
 		
-		final String checkSql = "select * from user where name=? and email=?";
+		final String checkSql = "select * from user where email=?";
 		try{
-			User tempUser = jdbcTemplate.queryForObject(checkSql, new Object[]{user.getUser(), user.getMail()}, new UserRowMapper());
+			User tempUser = jdbcTemplate.queryForObject(checkSql, new Object[]{user.getMail()}, new UserRowMapper());
 			
 			return "User already exists!!!";
 		
@@ -54,6 +57,17 @@ public class UserRepository {
 		
 		}
 	}
+	
+	@Transactional(readOnly=true)
+	public User getUserDetails(int userId) {
+		// TODO Auto-generated method stub
+		
+		
+		return jdbcTemplate.queryForObject("select * from transaction where user_id=?", new Object[]{userId}, new UserRowMapper());
+		
+	}
+	
+	
 }
 
 
