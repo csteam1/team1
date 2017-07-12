@@ -66,6 +66,15 @@ public class UserRepository {
 		return jdbcTemplate.queryForObject("select * from transaction where user_id=?", new Object[]{userId}, new UserRowMapper());
 		
 	}
+
+	public User getUserDetails(int userId) {
+		// TODO Auto-generated method stub
+		
+		return jdbcTemplate.queryForObject("select * from user where id=?", new Object[]{userId}, new UserRowMapper());
+
+	}
+	
+	
 	
 	
 }

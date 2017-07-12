@@ -37,6 +37,11 @@ public class WebController {
 		return repo.getUserTransactions(userId);
 	}
 	
+	public User detailsOfUser(int userId){
+		return repo.getUserDetails(userId);
+	}
+	
+	
 	@RequestMapping("/order")
 	public String placeOrder ()
 	{
