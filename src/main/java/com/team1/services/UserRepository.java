@@ -59,7 +59,7 @@ public class UserRepository {
 	}
 	
 	@Transactional(readOnly=true)
-	public User getUserDetails(int userId) {
+	public User getUserTransactions(int userId) {
 		// TODO Auto-generated method stub
 		
 		

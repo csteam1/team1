@@ -32,9 +32,9 @@ public class WebController {
 	}
 	
 	@RequestMapping("/user/{userId}")
-	public User detailOfSingleUser(@PathVariable int userId)
+	public User transactionsOfUser(@PathVariable int userId)
 	{
-		return repo.getUserDetails(userId);
+		return repo.getUserTransactions(userId);
 	}
 	
 	@RequestMapping("/order")
