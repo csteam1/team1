@@ -1,6 +1,6 @@
-drop table user if exists;
+drop table users if exists;
 
-CREATE TABLE user
+CREATE TABLE users
 (
 	id int(11) NOT NULL AUTO_INCREMENT,
 	name varchar(100) NOT NULL,
@@ -8,23 +8,21 @@ CREATE TABLE user
 	PRIMARY KEY (id)	 
 );
 
-
-
 drop table transaction if exists;
  
 CREATE TABLE transaction 
 (
-	user_id int(11) NOT NULL,
-	transaction_id int(11) NOT NULL,
-	type varchar(100) NOT NULL,
+	u_id int(11) NOT NULL,
+	t_id int(11) NOT NULL,
+	typeOrder varchar(100) NOT NULL,
 	side varchar(100) NOT NULL,
-	size int(11) NOT NULL,
-	time int(11) NOT NULL,
-	price int(11) NOT NULL,
-	currency_from varchar(100) NOT NULL,
-	currency_to varchar(100) NOT NULL,
-	transaction_state varchar(100) NOT NULL,
-	limit_price int(11) NOT NULL,
- 	PRIMARY KEY (transaction_id),
-	FOREIGN KEY (user_id) references user(id)
+	lotSize int(11) NOT NULL,
+	dateOfTransaction varchar(100) NOT NULL,
+	price double(11) NOT NULL,
+	currencyFrom varchar(100) NOT NULL,
+	currencyTo varchar(100) NOT NULL,
+	status varchar(100) NOT NULL,
+	limitPrice double(11) NOT NULL,
+ 	PRIMARY KEY (t_id),
+	FOREIGN KEY (u_id) references users(id)
 ); 

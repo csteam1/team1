@@ -23,9 +23,9 @@ public class InsertOrderService {
 	public String insertOrder(Order order){
 		//final String checkSql = "insert into transaction() ";
 		final String sql = "insert into "
-				+ "transaction(user_id, transaction_id, side, size, "
-				+ "time, price, currency_from, currency_to, "
-				+ "transaction_state, limit_price) "
+				+ "transaction(u_id, t_id, side, typeOrder, "
+				+ "lotSize, dateOfTransaction, price, currencyFrom, "
+				+ "currencyTo, status, limitPrice) "
 				+ "values(?,?,?,?,?,?,?,?,?,?)";
 		
 		KeyHolder holder = new GeneratedKeyHolder();
@@ -37,14 +37,15 @@ public class InsertOrderService {
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 				ps.setInt(0, order.getU_id());
 				ps.setInt(1, 0);
-				ps.setString(2, order.getSide().name());
-				ps.setInt(3, order.getLotSize());
-				ps.setString(4, "dummy");
-				ps.setDouble(5, order.getPrice());
-				ps.setString(6, order.getCurrencyFrom().name());
-				ps.setString(7, order.getCurrencyTo().name());
-				ps.setString(8, order.getStatus().name());
-				ps.setDouble(9, order.getLimitPrice());
+				ps.setString(2, order.getTypeOrder().name());
+				ps.setString(3, order.getSide().name());
+				ps.setInt(4, order.getLotSize());
+				ps.setString(5, "dummy");
+				ps.setDouble(6, order.getPrice());
+				ps.setString(7, order.getCurrencyFrom().name());
+				ps.setString(8, order.getCurrencyTo().name());
+				ps.setString(9, order.getStatus().name());
+				ps.setDouble(10, order.getLimitPrice());
 				return ps;
 			}
 		}, holder);
