@@ -9,8 +9,17 @@ public abstract class Order implements Comparable<Order>{
     private Type type;
     private int lotSize;
     private Status status;
+    private double limitPrice;
     
-    public Status getStatus() {
+    public double getLimitPrice() {
+		return limitPrice;
+	}
+
+	public void setLimitPrice(double limitPrice) {
+		this.limitPrice = limitPrice;
+	}
+
+	public Status getStatus() {
 		return status;
 	}
 
@@ -22,7 +31,7 @@ public abstract class Order implements Comparable<Order>{
 
 	
 	public Order(Currency currencyFrom, Currency currencyTo, Side side, int u_id, int t_id, String date, double price,
-			Type type, int lotSize, Status status) {
+			Type type, int lotSize, Status status, double limitPrice) {
 		super();
 		this.currencyFrom = currencyFrom;
 		this.currencyTo = currencyTo;
@@ -34,6 +43,7 @@ public abstract class Order implements Comparable<Order>{
 		this.type = type;
 		this.lotSize = lotSize;
 		this.status = status;
+		this.limitPrice = limitPrice;
 	}
 
 	public abstract boolean match(Order order);
