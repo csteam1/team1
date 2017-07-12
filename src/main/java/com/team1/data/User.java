@@ -3,31 +3,31 @@ package com.team1.data;
 public class User {
 
 	private int id;
-	private String mail, user;
+	private String email, name;
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getMail() {
-		return mail;
+	public String getEmail() {
+		return email;
 	}
-	public void setMail(String mail) {
-		this.mail = mail;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getUser() {
-		return user;
+	public String getName() {
+		return name;
 	}
-	public void setUser(String user) {
-		this.user = user;
+	public void setName(String name) {
+		this.name= name;
 	}
 	
-	public User(int id, String mail, String user) {
+	public User(String email, String name) {
 		super();
-		this.id = id;
-		this.mail = mail;
-		this.user = user;
+//		this.id = id;
+		this.email = email;
+		this.name= name;
 	}
 	
 	public User() {

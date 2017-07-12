@@ -27,10 +27,10 @@ public class UserRepository {
 	
 	
 	public String register (final User user){
-		
+		System.out.println(user.getEmail() + user.getName());
 		final String checkSql = "select * from user where email=?";
 		try{
-			User tempUser = jdbcTemplate.queryForObject(checkSql, new Object[]{user.getMail()}, new UserRowMapper());
+			User tempUser = jdbcTemplate.queryForObject(checkSql, new Object[]{user.getEmail()}, new UserRowMapper());
 			
 			return "User already exists!!!";
 		
@@ -44,8 +44,9 @@ public class UserRepository {
 				@Override
 				public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 					PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-					ps.setString(1, user.getUser());
-					ps.setString(2, user.getMail());
+					
+					ps.setString(1, user.getName());
+					ps.setString(2, user.getEmail());
 					return ps;
 				}
 			}, holder);
@@ -76,8 +77,8 @@ class UserRowMapper implements RowMapper<User>
 	@Override
 	public User mapRow(ResultSet rs, int rowNum) throws SQLException{
 		User user = new User();
-		user.setUser(rs.getString("name"));
-		user.setMail(rs.getString("email"));
+		user.setName(rs.getString("name"));
+		user.setEmail(rs.getString("email"));
 		return user;
 	}
 }
