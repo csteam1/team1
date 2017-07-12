@@ -36,9 +36,9 @@ public class WebController {
 	}
 	
 	@RequestMapping("/user/all")
-	public String detailsOfAllUsers ()
+	public List<Map<String, Object>>  detailsOfAllUsers ()
 	{
-		return "Detail of users";
+		return repo.getAllTransactions();
 	}
 	
 	@RequestMapping("/user/{userId}")

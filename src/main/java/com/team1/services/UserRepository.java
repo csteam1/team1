@@ -68,18 +68,21 @@ public class UserRepository {
 	@Transactional(readOnly=true)
 	public List<Map<String, Object>> getUserTransactions(int userId) {
 		// TODO Auto-generated method stub
-		try{
-			return jdbcTemplate.queryForList("select * from transaction where u_id=?", new Object[]{userId});
-		}catch(EmptyResultDataAccessException e){
-			return null;
-		}
+		return jdbcTemplate.queryForList("select * from transaction where u_id=?", new Object[]{userId});
 	}
-
+	
+	@Transactional(readOnly=true)
 	public User getUserDetails(int userId) {
 		// TODO Auto-generated method stub
 		
 		return jdbcTemplate.queryForObject("select * from users where id=?", new Object[]{userId}, new UserRowMapper());
 
+	}
+	
+	@Transactional(readOnly=true)
+	public List<Map<String, Object>> getAllTransactions() {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.queryForList("select * from transaction");
 	}
 
 	
