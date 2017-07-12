@@ -1,5 +1,8 @@
 package com.team1.controller;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,7 +42,7 @@ public class WebController {
 	}
 	
 	@RequestMapping("/user/{userId}")
-	public User transactionsOfUser(@PathVariable int userId)
+	public List<Map<String, Object>> transactionsOfUser(@PathVariable int userId)
 	{
 		return repo.getUserTransactions(userId);
 	}

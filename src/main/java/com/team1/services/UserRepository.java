@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,7 +18,11 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.team1.data.Currency;
 import com.team1.data.Order;
+import com.team1.data.Side;
+import com.team1.data.Status;
+import com.team1.data.Type;
 import com.team1.data.User;
 
 @Repository
@@ -60,10 +66,10 @@ public class UserRepository {
 	}
 	
 	@Transactional(readOnly=true)
-	public User getUserTransactions(int userId) {
+	public List<Map<String, Object>> getUserTransactions(int userId) {
 		// TODO Auto-generated method stub
 		try{
-			return jdbcTemplate.queryForObject("select * from transaction where u_id=?", new Object[]{userId}, new UserRowMapper());
+			return jdbcTemplate.queryForList("select * from transaction where u_id=?", new Object[]{userId});
 		}catch(EmptyResultDataAccessException e){
 			return null;
 		}
@@ -93,3 +99,24 @@ class UserRowMapper implements RowMapper<User>
 		return user;
 	}
 }
+
+
+//class TransactionRowMapper implements RowMapper<Order>
+//{
+//	@Override
+//	public Order mapRow(ResultSet rs, int rowNum) throws SQLException{
+//		Order transaction = new Order();
+//		transaction.setCurrencyFrom(Currency.valueOf(rs.getString("currencyFrom")));
+//		transaction.setCurrencyTo(Currency.valueOf(rs.getString("currencyTo")));
+//		transaction.setDateOfTransaction(rs.getString("dateOfTransaction"));
+//		transaction.setLimitPrice(rs.getDouble("limitPrice"));
+//		transaction.setLotSize(rs.getInt("lotSize"));
+//		transaction.setPrice(rs.getDouble("price"));
+//		transaction.setSide(Side.valueOf(rs.getString("side")));
+//		transaction.setStatus(Status.valueOf(rs.getString("status")));
+//		transaction.setT_id(rs.getInt("t_id"));
+//		transaction.setTypeOrder(Type.valueOf(rs.getString("typeOrder")));
+//		transaction.setU_id(rs.getInt("u_id"));
+//		return transaction;
+//	}
+//}
