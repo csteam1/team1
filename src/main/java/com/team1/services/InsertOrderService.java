@@ -13,6 +13,8 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.team1.data.Order;
+import com.team1.data.Status;
+import com.team1.data.Type;
 
 @Component
 public class InsertOrderService {
@@ -26,7 +28,7 @@ public class InsertOrderService {
 				+ "transaction(u_id, t_id, side, typeOrder, "
 				+ "lotSize, dateOfTransaction, price, currencyFrom, "
 				+ "currencyTo, status, limitPrice) "
-				+ "values(?,?,?,?,?,?,?,?,?,?)";
+				+ "values(?,?,?,?,?,?,?,?,?,?,?)";
 		
 		KeyHolder holder = new GeneratedKeyHolder();
 		jdbcTemplate.update(new PreparedStatementCreator() {
@@ -35,17 +37,20 @@ public class InsertOrderService {
 			public PreparedStatement createPreparedStatement(Connection connection) throws SQLException {
 				// TODO Auto-generated method stub
 				PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-				ps.setInt(0, order.getU_id());
-				ps.setInt(1, 0);
-				ps.setString(2, order.getTypeOrder().name());
-				ps.setString(3, order.getSide().name());
-				ps.setInt(4, order.getLotSize());
-				ps.setString(5, "dummy");
-				ps.setDouble(6, order.getPrice());
-				ps.setString(7, order.getCurrencyFrom().name());
-				ps.setString(8, order.getCurrencyTo().name());
-				ps.setString(9, order.getStatus().name());
-				ps.setDouble(10, order.getLimitPrice());
+				ps.setInt(1, order.getU_id());
+				ps.setInt(2, 0);
+				ps.setString(3, order.getTypeOrder().name());
+				ps.setString(4, order.getSide().name());
+				ps.setInt(5, order.getLotSize());
+				ps.setString(6, "dummy");
+				ps.setDouble(7, 0);
+				ps.setString(8, order.getCurrencyFrom().name());
+				ps.setString(9, order.getCurrencyTo().name());
+				ps.setString(10, Status.NOT_COMPLETED.name());
+				if(order.getTypeOrder() == Type.MO)
+					ps.setDouble(11, 0);
+				else
+					ps.setDouble(11, order.getLimitPrice());
 				return ps;
 			}
 		}, holder);

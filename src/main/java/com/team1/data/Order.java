@@ -1,6 +1,6 @@
 package com.team1.data;
 
-public abstract class Order implements Comparable<Order>{
+public class Order{
     private Currency currencyFrom, currencyTo;
     private Side side;
     private int u_id, t_id;
@@ -30,12 +30,12 @@ public abstract class Order implements Comparable<Order>{
 		this.limitPrice = limitPrice;
 	}
 
-	@Override
+/*	@Override
 	public int compareTo(Order o) {
 		
 		return 0;
 	}
-
+*/
 	public Currency getCurrencyFrom() {
         return currencyFrom;
     }
@@ -82,7 +82,7 @@ public abstract class Order implements Comparable<Order>{
 		return u_id;
 	}
 
-	public abstract boolean match(Order order);
+/*	public abstract boolean match(Order order);*/
 
 	public void setCurrencyFrom(Currency currencyFrom) {
 		this.currencyFrom = currencyFrom;
@@ -128,12 +128,12 @@ public abstract class Order implements Comparable<Order>{
 		this.u_id = u_id;
 	}
 
-	@Override
+	/*@Override
     public String toString() {
         return "Order{" +
                 "currency=" + currencyFrom +
                 ", amount=" +
                 ", side=" + side +
                 '}';
-    }	
+    }*/	
 }
