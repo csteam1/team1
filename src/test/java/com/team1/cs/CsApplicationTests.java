@@ -33,8 +33,8 @@ public class CsApplicationTests {
 	    public void testFindById(int id)
 	    {
 		 User user = new User();
-		 	//assertEquals("User1", user.getUser());
-	        //assertEquals("user1@gmail.com", user.getMail());
+		 	assertEquals("User1", user.getName());
+	        assertEquals("user1@gmail.com", user.getEmail());
 	        return;
 	    }
 	 
