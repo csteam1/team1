@@ -13,7 +13,6 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import com.team1.data.Order;
-import com.team1.data.Status;
 
 @Component
 public class InsertOrderService {
