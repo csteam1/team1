@@ -8,13 +8,21 @@ public abstract class Order implements Comparable<Order>{
     private double price;
     private Type type;
     private int lotSize;
-
-    public Order(){}
+    private Status status;
     
-    
+    public Status getStatus() {
+		return status;
+	}
 
-    public Order(Currency currencyFrom, Currency currencyTo, Side side, int u_id, int t_id, String date,
-			double price, Type type, int lotSize) {
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public Order(){}
+
+	
+	public Order(Currency currencyFrom, Currency currencyTo, Side side, int u_id, int t_id, String date, double price,
+			Type type, int lotSize, Status status) {
 		super();
 		this.currencyFrom = currencyFrom;
 		this.currencyTo = currencyTo;
@@ -25,6 +33,7 @@ public abstract class Order implements Comparable<Order>{
 		this.price = price;
 		this.type = type;
 		this.lotSize = lotSize;
+		this.status = status;
 	}
 
 	public abstract boolean match(Order order);
