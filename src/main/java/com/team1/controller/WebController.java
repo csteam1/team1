@@ -22,7 +22,7 @@ public class WebController {
 	@RequestMapping(value = "/register", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
 	public String registerUser(@RequestBody User user){
 //		new User(user.getUser(), user.getMail());
-		System.out.println(user.getEmail() + user.getName());
+//		System.out.println(user.getEmail() + user.getName());
 		return repo.register(user);
 		
 	}

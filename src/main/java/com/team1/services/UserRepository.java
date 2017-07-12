@@ -62,10 +62,11 @@ public class UserRepository {
 	@Transactional(readOnly=true)
 	public User getUserTransactions(int userId) {
 		// TODO Auto-generated method stub
-		
-		
-		return jdbcTemplate.queryForObject("select * from transaction where user_id=?", new Object[]{userId}, new UserRowMapper());
-		
+		try{
+			return jdbcTemplate.queryForObject("select * from transaction where user_id=?", new Object[]{userId}, new UserRowMapper());
+		}catch(EmptyResultDataAccessException e){
+			return null;
+		}
 	}
 
 	public User getUserDetails(int userId) {
@@ -74,6 +75,7 @@ public class UserRepository {
 		return jdbcTemplate.queryForObject("select * from user where id=?", new Object[]{userId}, new UserRowMapper());
 
 	}
+
 	
 	
 	

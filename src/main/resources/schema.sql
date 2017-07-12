@@ -12,7 +12,7 @@ CREATE TABLE user
 
 drop table transaction if exists;
  
-CREATE TABLE transction 
+CREATE TABLE transaction 
 (
 	user_id int(11) NOT NULL,
 	transaction_id int(11) NOT NULL,
