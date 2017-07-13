@@ -64,11 +64,12 @@ public class UserRepository {
 		
 		}
 	}
+
 	
 	@Transactional(readOnly=true)
-	public List<Map<String, Object>> getUserTransactions(int userId) {
+	public List<Order> getUserTransactions(int userId) {
 		// TODO Auto-generated method stub
-		return jdbcTemplate.queryForList("select * from transaction where u_id=?", new Object[]{userId});
+		return jdbcTemplate.query("select * from transaction where u_id=?", new Object[]{userId}, new TransactionRowMapper());
 	}
 	
 	@Transactional(readOnly=true)
@@ -80,9 +81,16 @@ public class UserRepository {
 	}
 	
 	@Transactional(readOnly=true)
-	public List<Map<String, Object>> getAllTransactions() {
+	public List<User> getAllUsers() {
 		// TODO Auto-generated method stub
-		return jdbcTemplate.queryForList("select * from transaction");
+		
+		return jdbcTemplate.query("select * from users", new UserRowMapper());
+
+	}
+	@Transactional(readOnly=true)
+	public List<Order> getAllTransactions() {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.query("select * from transaction", new TransactionRowMapper());
 	}
 
 	
@@ -104,22 +112,22 @@ class UserRowMapper implements RowMapper<User>
 }
 
 
-//class TransactionRowMapper implements RowMapper<Order>
-//{
-//	@Override
-//	public Order mapRow(ResultSet rs, int rowNum) throws SQLException{
-//		Order transaction = new Order();
-//		transaction.setCurrencyFrom(Currency.valueOf(rs.getString("currencyFrom")));
-//		transaction.setCurrencyTo(Currency.valueOf(rs.getString("currencyTo")));
-//		transaction.setDateOfTransaction(rs.getString("dateOfTransaction"));
-//		transaction.setLimitPrice(rs.getDouble("limitPrice"));
-//		transaction.setLotSize(rs.getInt("lotSize"));
-//		transaction.setPrice(rs.getDouble("price"));
-//		transaction.setSide(Side.valueOf(rs.getString("side")));
-//		transaction.setStatus(Status.valueOf(rs.getString("status")));
-//		transaction.setT_id(rs.getInt("t_id"));
-//		transaction.setTypeOrder(Type.valueOf(rs.getString("typeOrder")));
-//		transaction.setU_id(rs.getInt("u_id"));
-//		return transaction;
-//	}
-//}
+class TransactionRowMapper implements RowMapper<Order>
+{
+	@Override
+	public Order mapRow(ResultSet rs, int rowNum) throws SQLException{
+		Order transaction = new Order();
+		transaction.setCurrencyFrom(Currency.valueOf(rs.getString("currencyFrom")));
+		transaction.setCurrencyTo(Currency.valueOf(rs.getString("currencyTo")));
+		transaction.setDateOfTransaction(rs.getString("dateOfTransaction"));
+		transaction.setLimitPrice(rs.getDouble("limitPrice"));
+		transaction.setLotSize(rs.getInt("lotSize"));
+		transaction.setPrice(rs.getDouble("price"));
+		transaction.setSide(Side.valueOf(rs.getString("side")));
+		transaction.setStatus(Status.valueOf(rs.getString("status")));
+		transaction.setT_id(rs.getInt("t_id"));
+		transaction.setTypeOrder(Type.valueOf(rs.getString("typeOrder")));
+		transaction.setU_id(rs.getInt("u_id"));
+		return transaction;
+	}
+}
