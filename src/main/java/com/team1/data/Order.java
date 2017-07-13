@@ -1,5 +1,11 @@
 package com.team1.data;
 
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 public class Order{
     private Currency currencyFrom, currencyTo;
     private Side side;
@@ -10,6 +16,9 @@ public class Order{
     private int lotSize;
     private Status status;
     private double limitPrice;
+    
+    @Autowired
+	private JdbcTemplate jdbcTemplate;
     
     
     public Order(){}
@@ -137,8 +146,12 @@ public class Order{
 		// TODO Auto-generated method stub
 		
 		//Query for price
+		String getPriceSql = "select price from historyTransaction "
+				+ "where currencyFrom=? and currencyTo=? "
+				+ "and dateOfTransaction = max(dateOfTransaction)";
 		double market_price = 0;
-				
+		
+//		Order order = jdbcTemplate.query(getPriceSql,{currencyFrom.name(), currencyTo.name()}, new);
 		return market_price;
 
 	}
@@ -147,17 +160,30 @@ public class Order{
 		// TODO Auto-generated method stub
 		
 		//query for opposite currency match
+		String findSql = "select * from transaction where currencyFrom=? and currencyTo=? and status=?";
 		
-		/*if (foundInTransactiontable){
+		List<Map<String, Object>> result = jdbcTemplate.queryForList(findSql, new Object[]{currencyFrom.name(), currencyTo.name(), status.name()});
+
+		
+		if (!result.isEmpty()){
+
 			status = Status.COMPLETED;
 			addOrderInHistoryTable(currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
+			//update status query
+			String updateStatusSql = "update transaction set status=? where t_id=?";
+			jdbcTemplate.update(updateStatusSql, status, t_id);
 			
+			Map<String, Object> match = result.get(0);
 			
-			*/
 			//addOrderInHistoryTable();
+			addOrderInHistoryTable(Currency.valueOf((match.get("currencyFrom")).toString()),
+					Currency.valueOf((match.get("currencyTo")).toString()),
+					(double)match.get("price"),(int)match.get("lotSize"),(match.get("dateOfTransaction")).toString());
 			//update query
+			String updateMatchTransSql = "update transaction set status=? where t_id=?";
+			jdbcTemplate.update(updateMatchTransSql, Status.COMPLETED, (match.get("t_id")).toString());
 		
-		//}
+		}
 		
 	}
 
