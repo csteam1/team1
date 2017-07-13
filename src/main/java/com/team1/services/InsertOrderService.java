@@ -78,7 +78,7 @@ public class InsertOrderService {
 		}, holder);
 		
 		
-		return "Success";
+		return "Order has been place successfully \nOrder details are\n" + order.toString();
 	}
 
 	
