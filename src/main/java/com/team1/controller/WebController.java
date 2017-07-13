@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team1.data.Order;
 import com.team1.data.User;
+import com.team1.services.CancelOrder;
 import com.team1.services.InsertOrderService;
 import com.team1.services.UserRepository;
 import com.team1.validation.Validation;
@@ -74,15 +75,18 @@ public class WebController {
 			return result;
 	}
 	
-	@RequestMapping("/cancelOrder")
-	public String cancelOrder ()
+	@Autowired
+	CancelOrder co;
+
+	@RequestMapping("/cancelOrder/{userId}/{orderId}")
+	public String cancelOrder ( @PathVariable int userId, @PathVariable int orderId)
 	{
-		return "Cancel order requested";
+		return co.cancelOrder(orderId, jdbcTemplate, userId);
 	}
 	
 	@RequestMapping("/user/completed")		
 	public List<Order> allCompletedTransactions(){		
 		//convert to Tostring		
 		return repo.getAllUserCompletedTransactions(jdbcTemplate);		
-	}		
+	}	
 }
