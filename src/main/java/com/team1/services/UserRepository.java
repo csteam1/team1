@@ -29,8 +29,7 @@ import com.team1.data.User;
 public class UserRepository {
 	
 	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	
+	private JdbcTemplate jdbcTemplate;	
 	
 	public String register (final User user){
 		System.out.println(user.getEmail() + user.getName());
@@ -41,9 +40,7 @@ public class UserRepository {
 			return "User already exists!!!";
 		
 		}catch(EmptyResultDataAccessException e){
-			
-		
-		
+
 			final String sql = "insert into users(name,email) values(?,?)";
 			KeyHolder holder = new GeneratedKeyHolder();
 			jdbcTemplate.update(new PreparedStatementCreator(){
@@ -59,12 +56,9 @@ public class UserRepository {
 			
 			int newUserId = holder.getKey().intValue();
 			user.setId(newUserId);
-			return "Your User ID: "+ user.getId();
-		
-		
+			return "Your User ID: "+ user.getId();	
 		}
 	}
-
 	
 	@Transactional(readOnly=true)
 	public List<Order> getUserTransactions(int userId) {
@@ -87,18 +81,27 @@ public class UserRepository {
 		return jdbcTemplate.query("select * from users", new UserRowMapper());
 
 	}
+
 	@Transactional(readOnly=true)
 	public List<Order> getAllTransactions() {
 		// TODO Auto-generated method stub
 		return jdbcTemplate.query("select * from transaction", new TransactionRowMapper());
 	}
 
-	
-	
-	
-	
-}
+	@Transactional(readOnly=true)
+	public List<Order> getUserClosedOrdersTransactions(int userId) {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.query("select * from transaction where u_id=? and status = 'COMPLETED'", 
+				new Object[]{userId}, new TransactionRowMapper());
+	}
 
+	@Transactional(readOnly=true)
+	public List<Order> getUserOpenOrdersTransactions(int userId) {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.query("select * from transaction where u_id=? and status != 'COMPLETED'", 
+				new Object[]{userId}, new TransactionRowMapper());
+	}	
+}
 
 class UserRowMapper implements RowMapper<User>
 {
@@ -110,7 +113,6 @@ class UserRowMapper implements RowMapper<User>
 		return user;
 	}
 }
-
 
 class TransactionRowMapper implements RowMapper<Order>
 {
