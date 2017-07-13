@@ -56,20 +56,21 @@ public class InsertOrderService {
 				Date date = new Date();
 				ps.setString(6, dateFormat.format(date));
 				
-				ps.setDouble(7, 0);
 				ps.setString(8, order.getCurrencyFrom().name());
 				ps.setString(9, order.getCurrencyTo().name());
 				
 				if(order.getTypeOrder() == Type.MO)
 					{
-					ps.setDouble(11, order.getMarketPrice());
-					order.addOrderInHistoryTable(order.getCurrencyFrom(),order.getCurrencyTo(),order.getPrice(),order.getLotSize(),order.getDateOfTransaction());
+					ps.setDouble(7, order.getMarketPrice(jdbcTemplate));
+					order.addOrderInHistoryTable(jdbcTemplate, order.getCurrencyFrom(),order.getCurrencyTo(),order.getPrice(),order.getLotSize(),order.getDateOfTransaction());
 					ps.setString(10, Status.COMPLETED.name());
 					}
 				else{
 					ps.setString(10, Status.NOT_COMPLETED.name());
-					order.processLimitOrder();
+					ps.setDouble(7, 0);
+					order.processLimitOrder(jdbcTemplate);
 					ps.setDouble(11, order.getLimitPrice());
+					System.out.println("dasdasdasd");
 				}
 					
 				return ps;

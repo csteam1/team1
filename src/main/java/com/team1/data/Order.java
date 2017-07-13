@@ -24,8 +24,6 @@ public class Order{
     private Status status;
     private double limitPrice;
     
-    @Autowired
-	private JdbcTemplate jdbcTemplate;
     
     
     public Order(){}
@@ -144,7 +142,7 @@ public class Order{
 		this.u_id = u_id;
 	}
 
-	public void addOrderInHistoryTable(Currency currencyFrom2, Currency currencyTo2, double price2, int lotSize2, String dateOfTransaction2) {
+	public void addOrderInHistoryTable(JdbcTemplate jdbcTemplate, Currency currencyFrom2, Currency currencyTo2, double price2, int lotSize2, String dateOfTransaction2) {
 		// TODO Auto-generated method stub
 		String addOrderInHistorySql = "insert into historyTransaction(currencyFrom, currencyTo, price, lotSize, dateOfTransaction)"
 				+ "values(?,?,?,?,?)";
@@ -153,14 +151,13 @@ public class Order{
 		
 	}
 
-	public double getMarketPrice() {
+	public double getMarketPrice(JdbcTemplate jdbcTemplate) {
 		// TODO Auto-generated method stub
 		
 		//Query for price
 		String getPriceSql = "select * from historyTransaction "
 				+ "where currencyFrom=? and currencyTo=? "
 				+ "and dateOfTransaction = max(dateOfTransaction)";
-		double market_price = 0;
 		
 		Order order = jdbcTemplate.queryForObject(getPriceSql, new Object[]{currencyFrom.name(), currencyTo.name()}, new TransactionRowMapper());
 		
@@ -168,7 +165,7 @@ public class Order{
 
 	}
 
-	public void processLimitOrder() {
+	public void processLimitOrder(JdbcTemplate jdbcTemplate) {
 		// TODO Auto-generated method stub
 		
 		//query for opposite currency match
@@ -176,9 +173,9 @@ public class Order{
 		
 		
 		try{
-			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{currencyFrom.name(), currencyTo.name(), status.name()}, new TransactionRowMapper());
+			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), this.status.name()}, new TransactionRowMapper());
 			status = Status.COMPLETED;
-			addOrderInHistoryTable(currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
+			addOrderInHistoryTable(jdbcTemplate, currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
 			//update status query
 			String updateStatusSql = "update transaction set status=? where t_id=?";
 			jdbcTemplate.update(updateStatusSql, status, t_id);
@@ -186,7 +183,7 @@ public class Order{
 			Order match = result;
 			
 			//addOrderInHistoryTable();
-			addOrderInHistoryTable(match.getCurrencyFrom(), match.getCurrencyTo(),
+			addOrderInHistoryTable(jdbcTemplate, match.getCurrencyFrom(), match.getCurrencyTo(),
 					match.getPrice(), match.getLotSize(),match.getDateOfTransaction());
 			//update query
 			String updateMatchTransSql = "update transaction set status=? where t_id=?";
