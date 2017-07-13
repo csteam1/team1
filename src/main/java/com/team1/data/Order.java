@@ -1,10 +1,17 @@
 package com.team1.data;
 
+import com.team1.services.*;
+
+import ch.qos.logback.core.net.SyslogOutputStream;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 
 public class Order{
     private Currency currencyFrom, currencyTo;
@@ -139,6 +146,10 @@ public class Order{
 
 	public void addOrderInHistoryTable(Currency currencyFrom2, Currency currencyTo2, double price2, int lotSize2, String dateOfTransaction2) {
 		// TODO Auto-generated method stub
+		String addOrderInHistorySql = "insert into historyTransaction(currencyFrom, currencyTo, price, lotSize, dateOfTransaction)"
+				+ "values(?,?,?,?,?)";
+		
+		jdbcTemplate.update(addOrderInHistorySql, currencyFrom2, currencyTo2, price2, lotSize2, dateOfTransaction2);
 		
 	}
 
@@ -146,13 +157,14 @@ public class Order{
 		// TODO Auto-generated method stub
 		
 		//Query for price
-		String getPriceSql = "select price from historyTransaction "
+		String getPriceSql = "select * from historyTransaction "
 				+ "where currencyFrom=? and currencyTo=? "
 				+ "and dateOfTransaction = max(dateOfTransaction)";
 		double market_price = 0;
 		
-//		Order order = jdbcTemplate.query(getPriceSql,{currencyFrom.name(), currencyTo.name()}, new);
-		return market_price;
+		Order order = jdbcTemplate.queryForObject(getPriceSql, new Object[]{currencyFrom.name(), currencyTo.name()}, new TransactionRowMapper());
+		
+		return order.getPrice();
 
 	}
 
@@ -160,32 +172,32 @@ public class Order{
 		// TODO Auto-generated method stub
 		
 		//query for opposite currency match
-		String findSql = "select * from transaction where currencyFrom=? and currencyTo=? and status=?";
+		String findSql = "select * from transaction where currencyTo=? and currencyFrom=? and status=?";
 		
-		List<Map<String, Object>> result = jdbcTemplate.queryForList(findSql, new Object[]{currencyFrom.name(), currencyTo.name(), status.name()});
-
 		
-		if (!result.isEmpty()){
-
+		try{
+			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{currencyFrom.name(), currencyTo.name(), status.name()}, new TransactionRowMapper());
 			status = Status.COMPLETED;
 			addOrderInHistoryTable(currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
 			//update status query
 			String updateStatusSql = "update transaction set status=? where t_id=?";
 			jdbcTemplate.update(updateStatusSql, status, t_id);
 			
-			Map<String, Object> match = result.get(0);
+			Order match = result;
 			
 			//addOrderInHistoryTable();
-			addOrderInHistoryTable(Currency.valueOf((match.get("currencyFrom")).toString()),
-					Currency.valueOf((match.get("currencyTo")).toString()),
-					(double)match.get("price"),(int)match.get("lotSize"),(match.get("dateOfTransaction")).toString());
+			addOrderInHistoryTable(match.getCurrencyFrom(), match.getCurrencyTo(),
+					match.getPrice(), match.getLotSize(),match.getDateOfTransaction());
 			//update query
 			String updateMatchTransSql = "update transaction set status=? where t_id=?";
-			jdbcTemplate.update(updateMatchTransSql, Status.COMPLETED, (match.get("t_id")).toString());
-		
+			jdbcTemplate.update(updateMatchTransSql, Status.COMPLETED, match.getT_id()+ "");
+			
+		}catch(NullPointerException e){
+			
 		}
-		
 	}
+		
+}
 
 	/*@Override
     public String toString() {
@@ -194,5 +206,30 @@ public class Order{
                 ", amount=" +
                 ", side=" + side +
                 '}';
-    }*/	
+    }*/
+	
+	
+	
+
+
+
+
+class TransactionRowMapper implements RowMapper<Order>
+{
+	@Override
+	public Order mapRow(ResultSet rs, int rowNum) throws SQLException{
+		Order transaction = new Order();
+		transaction.setCurrencyFrom(Currency.valueOf(rs.getString("currencyFrom")));
+		transaction.setCurrencyTo(Currency.valueOf(rs.getString("currencyTo")));
+		transaction.setDateOfTransaction(rs.getString("dateOfTransaction"));
+		transaction.setLimitPrice(rs.getDouble("limitPrice"));
+		transaction.setLotSize(rs.getInt("lotSize"));
+		transaction.setPrice(rs.getDouble("price"));
+		transaction.setSide(Side.valueOf(rs.getString("side")));
+		transaction.setStatus(Status.valueOf(rs.getString("status")));
+		transaction.setT_id(rs.getInt("t_id"));
+		transaction.setTypeOrder(Type.valueOf(rs.getString("typeOrder")));
+		transaction.setU_id(rs.getInt("u_id"));
+		return transaction;
+	}
 }
