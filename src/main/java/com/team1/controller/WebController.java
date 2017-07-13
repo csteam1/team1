@@ -1,5 +1,8 @@
 package com.team1.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -96,7 +99,12 @@ public class WebController {
 	public String updateHistoryTable (@RequestBody HistoryTable historyData)
 	{
 		 Order o = new Order();
-		 o.addOrderInHistoryTable(jdbcTemplate, historyData.getCurrencyFrom(), historyData.getCurrencyTo(), historyData.getPrice(), historyData.getLotSize(), historyData.getDateOfTransaction());
+		 
+		 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		 Date date = new Date();
+			
+		 historyData.setDateOfTransaction(dateFormat.format(date));
+		 o.addOrderInHistoryTable(jdbcTemplate, historyData.getCurrencyFrom(), historyData.getCurrencyTo(), historyData.getPrice(), historyData.getLotSize(), dateFormat.format(date));
 		return "Updated in history table"; 
 	}
 }
