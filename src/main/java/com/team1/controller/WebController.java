@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import com.team1.data.Order;
 import com.team1.data.User;
 import com.team1.services.InsertOrderService;
 import com.team1.services.UserRepository;
+import com.team1.validation.Validation;
 
 
 @RestController
@@ -26,6 +28,8 @@ public class WebController {
 	@Autowired
 	InsertOrderService ios;
 	
+	@Autowired
+	JdbcTemplate jdbcTemplate;
 	
 	@RequestMapping(value = "/register", method=RequestMethod.POST, consumes= MediaType.APPLICATION_JSON_VALUE)
 	public String registerUser(@RequestBody User user){
@@ -55,7 +59,12 @@ public class WebController {
 	@RequestMapping(value = "/order", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
 	public String placeOrder ( @RequestBody Order order)
 	{
-		return ios.insertOrder(order);
+		Validation a = new Validation();
+		String result = a.validateOrder(order, jdbcTemplate);
+		if(result.equals("success"))
+				return ios.insertOrder(order);
+		else
+			return result;
 	}
 	
 	@RequestMapping("/cancelOrder")

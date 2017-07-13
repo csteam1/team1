@@ -1,0 +1,1 @@
+"Order has been place successfully \nOrder details are\n" + order.toString();
