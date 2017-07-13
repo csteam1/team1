@@ -174,7 +174,7 @@ public class Order{
 		
 		
 		try{
-			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), this.status.name()}, new TransactionRowMapper());
+			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), Status.NOT_COMPLETED}, new TransactionRowMapper());
 			status = Status.COMPLETED;
 			addOrderInHistoryTable(jdbcTemplate, currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
 			//update status query
@@ -190,7 +190,7 @@ public class Order{
 			String updateMatchTransSql = "update transaction set status=? where t_id=?";
 			jdbcTemplate.update(updateMatchTransSql, Status.COMPLETED, match.getT_id()+ "");
 			
-		}catch(NullPointerException e){
+		}catch(Exception e){
 			
 		}
 	}

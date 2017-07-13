@@ -55,23 +55,30 @@ public class InsertOrderService {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 				Date date = new Date();
 				ps.setString(6, dateFormat.format(date));
+				order.setDateOfTransaction(dateFormat.format(date));
 				
 				ps.setString(8, order.getCurrencyFrom().name());
 				ps.setString(9, order.getCurrencyTo().name());
 				
 				if(order.getTypeOrder() == Type.MO)
 					{
-					ps.setDouble(7, order.getMarketPrice(jdbcTemplate));
+					double curr_price = order.getMarketPrice(jdbcTemplate);
+					ps.setDouble(7, curr_price);
+					order.setPrice(curr_price);
 					order.addOrderInHistoryTable(jdbcTemplate, order.getCurrencyFrom(),order.getCurrencyTo(),order.getPrice(),order.getLotSize(),order.getDateOfTransaction());
 					ps.setString(10, Status.COMPLETED.name());
+					order.setStatus(Status.COMPLETED);
 					ps.setDouble(11, 0);
+					order.setLimitPrice(0);
 					}
 				else{
+					order.setPrice(0);
 					ps.setString(10, Status.NOT_COMPLETED.name());
+					order.setStatus(Status.NOT_COMPLETED);
 					ps.setDouble(7, 0);
 					order.processLimitOrder(jdbcTemplate);
 					ps.setDouble(11, order.getLimitPrice());
-					System.out.println("dasdasdasd");
+					order.setLimitPrice(order.getLimitPrice());
 				}
 					
 				return ps;
