@@ -72,11 +72,11 @@ public class InsertOrderService {
 					order.setLimitPrice(0);
 					}
 				else{
-					order.setPrice(0);
-					ps.setString(10, Status.NOT_COMPLETED.name());
+					ps.setDouble(7, order.getLimitPrice());
+					order.setPrice(order.getLimitPrice());
 					order.setStatus(Status.NOT_COMPLETED);
-					ps.setDouble(7, 0);
 					order.processLimitOrder(jdbcTemplate);
+					ps.setString(10, order.getStatus().name());
 					ps.setDouble(11, order.getLimitPrice());
 					order.setLimitPrice(order.getLimitPrice());
 				}

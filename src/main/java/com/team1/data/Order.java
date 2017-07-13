@@ -174,24 +174,25 @@ public class Order{
 		
 		
 		try{
-			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), Status.NOT_COMPLETED}, new TransactionRowMapper());
-			status = Status.COMPLETED;
-			addOrderInHistoryTable(jdbcTemplate, currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
+			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), (Status.NOT_COMPLETED).name()}, new TransactionRowMapper());
+			
+			this.status = Status.COMPLETED;
+			addOrderInHistoryTable(jdbcTemplate, this.currencyFrom,this.currencyTo,this.price,this.lotSize,this.dateOfTransaction);
 			//update status query
-			String updateStatusSql = "update transaction set status=? where t_id=?";
-			jdbcTemplate.update(updateStatusSql, status, t_id);
+//			String updateStatusSql = "update transaction set status=? where t_id=?";
+//			jdbcTemplate.update(updateStatusSql, this.status.name(), this.t_id);
 			
 			Order match = result;
 			
+			//update query
+			String updateMatchTransSql = "update transaction set status=? where t_id=?";
+			jdbcTemplate.update(updateMatchTransSql, (Status.COMPLETED).name(), match.getT_id()+ "");
 			//addOrderInHistoryTable();
 			addOrderInHistoryTable(jdbcTemplate, match.getCurrencyFrom(), match.getCurrencyTo(),
 					match.getPrice(), match.getLotSize(),match.getDateOfTransaction());
-			//update query
-			String updateMatchTransSql = "update transaction set status=? where t_id=?";
-			jdbcTemplate.update(updateMatchTransSql, Status.COMPLETED, match.getT_id()+ "");
+			
 			
 		}catch(Exception e){
-			
 		}
 	}
 		
