@@ -91,14 +91,14 @@ public class UserRepository {
 	@Transactional(readOnly=true)
 	public List<Order> getUserClosedOrdersTransactions(int userId) {
 		// TODO Auto-generated method stub
-		return jdbcTemplate.query("select * from transaction where u_id=? and status != 'NOT COMPLETED'", 
+		return jdbcTemplate.query("select * from transaction where u_id=? and status != 'NOT_COMPLETED'", 
 				new Object[]{userId}, new TransactionRowMapper());
 	}
 
 	@Transactional(readOnly=true)
 	public List<Order> getUserOpenOrdersTransactions(int userId) {
 		// TODO Auto-generated method stub
-		return jdbcTemplate.query("select * from transaction where u_id=? and status = 'NOT COMPLETED'", 
+		return jdbcTemplate.query("select * from transaction where u_id=? and status = 'NOT_COMPLETED'", 
 				new Object[]{userId}, new TransactionRowMapper());
 	}
 
