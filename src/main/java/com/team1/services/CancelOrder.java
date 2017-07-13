@@ -5,6 +5,7 @@ import java.sql.SQLException;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
 
 import com.team1.data.Currency;
 import com.team1.data.Order;
@@ -12,6 +13,7 @@ import com.team1.data.Side;
 import com.team1.data.Status;
 import com.team1.data.Type;
 
+@Component
 public class CancelOrder {
 
 	Enum<Status> orderStatus;
