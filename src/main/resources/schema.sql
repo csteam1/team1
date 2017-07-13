@@ -26,3 +26,16 @@ CREATE TABLE transaction
  	PRIMARY KEY (t_id),
 	FOREIGN KEY (u_id) references users(id)
 ); 
+
+
+
+drop table historyTransaction if exists;
+
+CREATE TABLE historyTransaction
+(
+	currencyFrom varchar(100) NOT NULL,
+	currencyTo varchar(100) NOT NULL,
+	price double(11) NOT NULL,
+	lotSize int(11) NOT NULL,
+	dateOfTransaction varchar(100) NOT NULL
+);

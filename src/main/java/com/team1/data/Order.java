@@ -128,6 +128,39 @@ public class Order{
 		this.u_id = u_id;
 	}
 
+	public void addOrderInHistoryTable(Currency currencyFrom2, Currency currencyTo2, double price2, int lotSize2, String dateOfTransaction2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public double getMarketPrice() {
+		// TODO Auto-generated method stub
+		
+		//Query for price
+		double market_price = 0;
+				
+		return market_price;
+
+	}
+
+	public void processLimitOrder() {
+		// TODO Auto-generated method stub
+		
+		//query for opposite currency match
+		
+		if (foundInTransactiontable){
+			status = Status.COMPLETED;
+			addOrderInHistoryTable(currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
+			
+			
+			
+			//addOrderInHistoryTable();
+			//update query
+		
+		}
+		
+	}
+
 	/*@Override
     public String toString() {
         return "Order{" +
