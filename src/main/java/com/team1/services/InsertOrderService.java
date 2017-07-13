@@ -64,6 +64,7 @@ public class InsertOrderService {
 					ps.setDouble(7, order.getMarketPrice(jdbcTemplate));
 					order.addOrderInHistoryTable(jdbcTemplate, order.getCurrencyFrom(),order.getCurrencyTo(),order.getPrice(),order.getLotSize(),order.getDateOfTransaction());
 					ps.setString(10, Status.COMPLETED.name());
+					ps.setDouble(11, 0);
 					}
 				else{
 					ps.setString(10, Status.NOT_COMPLETED.name());

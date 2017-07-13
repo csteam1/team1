@@ -147,7 +147,7 @@ public class Order{
 		String addOrderInHistorySql = "insert into historyTransaction(currencyFrom, currencyTo, price, lotSize, dateOfTransaction)"
 				+ "values(?,?,?,?,?)";
 		
-		jdbcTemplate.update(addOrderInHistorySql, currencyFrom2, currencyTo2, price2, lotSize2, dateOfTransaction2);
+		jdbcTemplate.update(addOrderInHistorySql, currencyFrom2.name(), currencyTo2.name(), price2, lotSize2, dateOfTransaction2);
 		
 	}
 
@@ -155,11 +155,12 @@ public class Order{
 		// TODO Auto-generated method stub
 		
 		//Query for price
-		String getPriceSql = "select * from historyTransaction "
-				+ "where currencyFrom=? and currencyTo=? "
-				+ "and dateOfTransaction = max(dateOfTransaction)";
+		String getPriceSql = "select * from historyTransaction ht "
+				+ "join ( select max(mx.dateOfTransaction) as maxId"
+				+ " from historyTransaction mx)m where m.maxId = ht.dateOfTransaction "
+				+ "and currencyFrom=? and currencyTo=? ";
 		
-		Order order = jdbcTemplate.queryForObject(getPriceSql, new Object[]{currencyFrom.name(), currencyTo.name()}, new TransactionRowMapper());
+		Order order = jdbcTemplate.queryForObject(getPriceSql, new Object[]{currencyFrom.name(), currencyTo.name()}, new HistoryTransactionRowMapper());
 		
 		return order.getPrice();
 
@@ -227,6 +228,24 @@ class TransactionRowMapper implements RowMapper<Order>
 		transaction.setT_id(rs.getInt("t_id"));
 		transaction.setTypeOrder(Type.valueOf(rs.getString("typeOrder")));
 		transaction.setU_id(rs.getInt("u_id"));
+		return transaction;
+	}
+}
+
+
+
+
+class HistoryTransactionRowMapper implements RowMapper<Order>
+{
+	@Override
+	public Order mapRow(ResultSet rs, int rowNum) throws SQLException{
+		Order transaction = new Order();
+		transaction.setCurrencyFrom(Currency.valueOf(rs.getString("currencyFrom")));
+		transaction.setCurrencyTo(Currency.valueOf(rs.getString("currencyTo")));
+		transaction.setDateOfTransaction(rs.getString("dateOfTransaction"));
+		transaction.setLotSize(rs.getInt("lotSize"));
+		transaction.setPrice(rs.getDouble("price"));
+
 		return transaction;
 	}
 }
