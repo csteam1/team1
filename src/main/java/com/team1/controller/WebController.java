@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.team1.data.Currency;
+import com.team1.data.HistoryTable;
 import com.team1.data.Order;
 import com.team1.data.User;
 import com.team1.services.CancelOrder;
@@ -88,5 +90,13 @@ public class WebController {
 	public List<Order> allCompletedTransactions(){		
 		//convert to Tostring		
 		return repo.getAllUserCompletedTransactions(jdbcTemplate);		
-	}	
+	}
+	
+	@RequestMapping(value = "/updateHistory", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE)
+	public String updateHistoryTable (@RequestBody HistoryTable historyData)
+	{
+		 Order o = new Order();
+		 o.addOrderInHistoryTable(jdbcTemplate, historyData.getCurrencyFrom(), historyData.getCurrencyTo(), historyData.getPrice(), historyData.getLotSize(), historyData.getDateOfTransaction());
+		return "Updated in history table"; 
+	}
 }

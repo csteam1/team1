@@ -23,8 +23,12 @@ public class CancelOrder {
 		//Query for gettting status of order from orderId
 		String orderStatusQuery = "select * from transaction where t_id=? and u_id=?";
 		
-		Order order = jdbcTemplate.queryForObject(orderStatusQuery, new Object[]{orderId, userId}, new TransactionRowMapper());
-		orderStatus = order.getStatus();
+		try{
+			Order order = jdbcTemplate.queryForObject(orderStatusQuery, new Object[]{orderId, userId}, new TransactionRowMapper());
+			orderStatus = order.getStatus();	
+		} catch (Exception e) {
+			return "Failed to cancel transaction, no such transaction";
+		}
 		
 		if (orderStatus == Status.COMPLETED)
 			return "Order cannot be canceled. It is already executed ";
@@ -33,7 +37,11 @@ public class CancelOrder {
 		else 
 		{
 			String update_status = "update transaction set status=? where u_id=?";
-			jdbcTemplate.update(update_status, Status.CANCELED, userId);
+			try{
+				jdbcTemplate.update(update_status, Status.CANCELED, userId);
+			} catch (Exception e){
+				return "Update to database failed";
+			}
 			//Insert query for updating status as cancelled
 			return "Order cancelled";
 		}
