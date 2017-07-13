@@ -17,7 +17,7 @@ import com.team1.data.Type;
 public class CancelOrder {
 
 	Enum<Status> orderStatus;
-	public String cancelOrder (int orderId, JdbcTemplate jdbcTemplate, int userId)
+	public String cancelOrder (String orderId, JdbcTemplate jdbcTemplate, int userId)
 	{
 		
 		//Query for gettting status of order from orderId
@@ -36,9 +36,9 @@ public class CancelOrder {
 			return "Order is already cancelled";
 		else 
 		{
-			String update_status = "update transaction set status=? where u_id=?";
+			String update_status = "update transaction set status=? where t_id=?";
 			try{
-				jdbcTemplate.update(update_status, Status.CANCELED, userId);
+				jdbcTemplate.update(update_status, Status.CANCELED.name(), orderId);
 			} catch (Exception e){
 				return "Update to database failed";
 			}

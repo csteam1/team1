@@ -81,7 +81,7 @@ public class WebController {
 	CancelOrder co;
 
 	@RequestMapping("/cancelOrder/{userId}/{orderId}")
-	public String cancelOrder ( @PathVariable int userId, @PathVariable int orderId)
+	public String cancelOrder ( @PathVariable int userId, @PathVariable String orderId)
 	{
 		return co.cancelOrder(orderId, jdbcTemplate, userId);
 	}
