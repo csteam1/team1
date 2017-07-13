@@ -171,29 +171,41 @@ public class Order{
 		
 		//query for opposite currency match
 		String findSql = "select * from transaction where currencyTo=? and currencyFrom=? and status=?";
+		Order match = null;
 		
 		
-		try{
-			Order result = jdbcTemplate.queryForObject(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), (Status.NOT_COMPLETED).name()}, new TransactionRowMapper());
-			
-			this.status = Status.COMPLETED;
-			addOrderInHistoryTable(jdbcTemplate, this.currencyFrom,this.currencyTo,this.price,this.lotSize,this.dateOfTransaction);
-			//update status query
+		List<Order> result = jdbcTemplate.query(findSql, new Object[]{this.currencyFrom.name(), this.currencyTo.name(), (Status.NOT_COMPLETED).name()}, new TransactionRowMapper());
+		
+		if(result.isEmpty()) return;
+		
+		double max = -1;
+		for(int i=0;i<result.size();i++){
+			if(Math.abs((result.get(i).getLimitPrice()) - this.getLimitPrice())> max){
+				max = Math.abs((result.get(i).getLimitPrice()) - this.getLimitPrice());
+				match = result.get(i);
+			}
+		}
+		
+		
+		
+		
+		this.status = Status.COMPLETED;
+		addOrderInHistoryTable(jdbcTemplate, this.currencyFrom,this.currencyTo,this.price,this.lotSize,this.dateOfTransaction);
+		//update status query
 //			String updateStatusSql = "update transaction set status=? where t_id=?";
 //			jdbcTemplate.update(updateStatusSql, this.status.name(), this.t_id);
+		
+		
+		
+		//update query
+		String updateMatchTransSql = "update transaction set status=? where t_id=?";
+		jdbcTemplate.update(updateMatchTransSql, (Status.COMPLETED).name(), match.getT_id()+ "");
+		//addOrderInHistoryTable();
+		addOrderInHistoryTable(jdbcTemplate, match.getCurrencyFrom(), match.getCurrencyTo(),
+				match.getPrice(), match.getLotSize(),match.getDateOfTransaction());
+		
 			
-			Order match = result;
-			
-			//update query
-			String updateMatchTransSql = "update transaction set status=? where t_id=?";
-			jdbcTemplate.update(updateMatchTransSql, (Status.COMPLETED).name(), match.getT_id()+ "");
-			//addOrderInHistoryTable();
-			addOrderInHistoryTable(jdbcTemplate, match.getCurrencyFrom(), match.getCurrencyTo(),
-					match.getPrice(), match.getLotSize(),match.getDateOfTransaction());
-			
-			
-		}catch(Exception e){
-		}
+		
 	}
 		
 }
