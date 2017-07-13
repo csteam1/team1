@@ -2,19 +2,13 @@ package com.team1.validation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.team1.data.Currency;
 import com.team1.data.Order;
-import com.team1.data.Side;
-import com.team1.data.Status;
 import com.team1.data.Type;
 import com.team1.data.User;
 
