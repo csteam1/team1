@@ -148,16 +148,16 @@ public class Order{
 		
 		//query for opposite currency match
 		
-		if (foundInTransactiontable){
+		/*if (foundInTransactiontable){
 			status = Status.COMPLETED;
 			addOrderInHistoryTable(currencyFrom,currencyTo,price,lotSize,dateOfTransaction);
 			
 			
-			
+			*/
 			//addOrderInHistoryTable();
 			//update query
 		
-		}
+		//}
 		
 	}
 

@@ -40,16 +40,17 @@ public class WebController {
 	}
 	
 	@RequestMapping("/user/all")
-	public List<Map<String, Object>>  detailsOfAllUsers ()
+	public List<Order>  detailsOfAllUsers ()
 	{
 		return repo.getAllTransactions();
 	}
 	
 	@RequestMapping("/user/{userId}")
-	public List<Map<String, Object>> transactionsOfUser(@PathVariable int userId)
+	public List<Order> transactionsOfUser(@PathVariable int userId)
 	{
 		return repo.getUserTransactions(userId);
 	}
+	
 	
 	public User detailsOfUser(int userId){
 		return repo.getUserDetails(userId);

@@ -2,14 +2,9 @@ package com.team1.cs;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +45,7 @@ public class CsApplicationTests {
 		 return;
 	 }
 	 
-	 @Test
+	 /*@Test
 	    public void TestGetUserTransactionsByID()
 	    {
 
@@ -58,7 +53,7 @@ public class CsApplicationTests {
 		 	
 	        return;
 		
-	    }
+	    }*/
 	 
 	 
 	/* @Test

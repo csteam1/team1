@@ -1,3 +1,10 @@
+insert into users(id, name, email) values(1,'User1', 'user1@gmail.com');
+
+insert into transaction(U_ID, T_ID, TYPEORDER, SIDE, LOTSIZE, DATEOFTRANSACTION, PRICE, CURRENCYFROM, CURRENCYTO,STATUS, LIMITPRICE) 
+values(1,5,'market','buy',400,'25',1.303,'USD','CAD','Executed',3.4);
+
+
+
 insert into historyTransaction(currencyFrom, currencyTo, price, lotSize, dateOfTransaction) 
 	values('USD', 'JPY', 1.50, 100, '2017'); 
 
