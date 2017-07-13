@@ -100,6 +100,12 @@ public class UserRepository {
 		// TODO Auto-generated method stub
 		return jdbcTemplate.query("select * from transaction where u_id=? and status != 'COMPLETED'", 
 				new Object[]{userId}, new TransactionRowMapper());
+	}
+
+	public List<Order> getAllUserCompletedTransactions(JdbcTemplate jdbcTemplate) {
+		// TODO Auto-generated method stub
+		return jdbcTemplate.query("select * from transaction where status = 'COMPLETED'", 
+				new TransactionRowMapper());
 	}	
 }
 

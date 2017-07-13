@@ -78,5 +78,11 @@ public class WebController {
 	public String cancelOrder ()
 	{
 		return "Cancel order requested";
-	}	
+	}
+	
+	@RequestMapping("/user/completed")		
+	public List<Order> allCompletedTransactions(){		
+		//convert to Tostring		
+		return repo.getAllUserCompletedTransactions(jdbcTemplate);		
+	}		
 }
